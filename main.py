@@ -15,29 +15,27 @@ async def on_message(message):
   #messages must begin with $$   
   if message.author != client.user and message.content.startswith("$$"):
     # stringify the channel id and strip off the $$
-    channelId = str(message.channel.id)
     content = message.content[2:]
-    if channelId in db:
-      # If there's already an everybot message in this
-      # channel then grab its ID and lets reuse it
-      existingMessageId = db[channelId]
-      try:
-        editable = await message.channel.fetch_message(existingMessageId)
-        await editable.edit(content=content)
-      # make sure you catch the error if the message 
-      # you thought was there got deleted somehow
-      except discord.errors.NotFound:
-        # send the new message and log its id to reuse next time
-        newMsg = await message.channel.send(content)
-        db[channelId] = newMsg.id
-
+    editable = await getExistingMessage(message)
+    if editable is not None:
+      await editable.edit(content=content)
     else:
       newMsg = await message.channel.send(content)
-      db[channelId] = newMsg.id
+      db[str(message.channel.id)] = newMsg.id
 
     # the user's message has to be cleaned up
     await message.delete()
 
+
+async def getExistingMessage(message):
+  channelId = str(message.channel.id)
+  if channelId in db:
+    existingMessageId = db[channelId]
+    try:
+      return await message.channel.fetch_message(existingMessageId)
+    except discord.errors.NotFound:
+      pass
+  return None
 
 keepalive.keep_alive()
 token = os.environ.get("DISCORD_TOKEN") 
