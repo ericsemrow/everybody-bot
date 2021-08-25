@@ -1,5 +1,6 @@
 import discord
 import os
+import keepalive
 from replit import db
 
 client = discord.Client()
@@ -38,5 +39,6 @@ async def on_message(message):
     await message.delete()
 
 
+keepalive.keep_alive()
 token = os.environ.get("DISCORD_TOKEN") 
 client.run(token)
