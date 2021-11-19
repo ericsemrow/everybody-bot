@@ -17,20 +17,29 @@ async def on_message(message):
     # stringify the channel id and strip off the $$
     content = message.content[2:]
     editable = await getExistingMessage(message)
-    if editable is not None:
-      await editable.edit(content=content)
-    else:
-      newMsg = await message.channel.send(content)
-      db[str(message.channel.id)] = newMsg.id
+    try:
+      if editable is not None:
+        await editable.edit(content=content)
+      else:
+        newMsg = await message.channel.send(content)
+        db[str(message.channel.id)] = newMsg.id
+    except Exception as e:
+      print (f'Permission error when sending update or fresh message: {e}')
 
     # if there's an everybody-bot-log channel then
     # plop the message in there for posterity
     logChannel = getLogChannel(message)
-    if logChannel is not None:
-      await logChannel.send(f"```{content}``` by {message.author} in <#{message.channel.id}>")
-
+    try:
+      if logChannel is not None:
+        await logChannel.send(f'```{content}``` by {message.author} in <#{message.channel.id}>')
+    except Exception as e:
+      print(f'Permission issue sending log message: {e}')
     # the user's message has to be cleaned up
-    await message.delete()
+
+    try:
+      await message.delete()
+    except Exception as e:
+      print(f'Permission issue deleting old message: {e}')
 
 
 async def getExistingMessage(message):
