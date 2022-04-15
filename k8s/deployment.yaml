@@ -28,7 +28,7 @@ spec:
             memory: "96Mi"
             cpu: "5m"
         securityContext:
-          runAsUser: bot
+          runAsUser: 2000
         volumeMounts:
           - name: everybody-storage
             mountPath: /opt/storage
