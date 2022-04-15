@@ -6,6 +6,8 @@ metadata:
     app: everybody
 spec:
   replicas: 1
+  serviceName: "everybody"
+  minReadySeconds: 10
   selector:
     matchLabels:
       app: everybody
@@ -14,6 +16,7 @@ spec:
       labels:
         app: everybody
     spec:
+      terminationGracePeriodSeconds: 10
       containers:
       - name: everybody
         image: us-west4-docker.pkg.dev/scum-and-villainy-bot/bots/everybody-discord-bot:latest
@@ -29,3 +32,11 @@ spec:
         envFrom:
         - secretRef:
             name: everybody-secrets
+  volumeClaimTemplates:
+    - metadata:
+        name: everybody-storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi

@@ -3,4 +3,3 @@ commonLabels:
   app: everybody
 resources:
   - deployment.yaml
-  - pvc.yaml
