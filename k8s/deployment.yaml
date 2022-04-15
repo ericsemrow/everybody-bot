@@ -7,7 +7,6 @@ metadata:
 spec:
   replicas: 1
   serviceName: "everybody"
-  minReadySeconds: 10
   selector:
     matchLabels:
       app: everybody
