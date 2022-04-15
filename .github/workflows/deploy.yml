@@ -77,5 +77,5 @@ jobs:
         cd ./k8s/
         ./kustomize edit set image ${{env.GAR_LOCATION}}-docker.pkg.dev/${{env.PROJECT_ID}}/${{env.REPOSITORY}}/${{env.IMAGE}}=${{env.GAR_LOCATION}}-docker.pkg.dev/${{env.PROJECT_ID}}/${{env.REPOSITORY}}/${{env.IMAGE}}:${{github.sha}}
         ./kustomize build . | kubectl apply -f -
-        kubectl rollout status deployment/$DEPLOYMENT_NAME --namespace=bots
+        kubectl rollout status statefulset/$DEPLOYMENT_NAME --namespace=bots
         #kubectl get services -o wide
