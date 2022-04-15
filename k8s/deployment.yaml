@@ -35,6 +35,10 @@ spec:
     - metadata:
         name: everybody-storage
       spec:
+        securitycontext:
+          fsGroup: 2000
+          runAsNonRoot: true
+          runAsUser: 1000
         accessModes: [ "ReadWriteOnce" ]
         resources:
           requests:
