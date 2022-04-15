@@ -16,7 +16,7 @@ spec:
         app: everybody
     spec:
       securityContext:
-        fsGroup: bot
+        fsGroup: 2000
       terminationGracePeriodSeconds: 10
       containers:
       - name: everybody
