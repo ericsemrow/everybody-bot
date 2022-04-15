@@ -1,10 +1,8 @@
-import discord
-import os
-import keepalive
-from replit import db
+import os, discord
+from tinydb import TinyDB, Query
 
+db = TinyDB('/opt/storage/db.json')
 client = discord.Client()
-print( "Starting" )
 
 @client.event
 async def on_ready():
@@ -22,7 +20,8 @@ async def on_message(message):
         await editable.edit(content=content)
       else:
         newMsg = await message.channel.send(content)
-        db[str(message.channel.id)] = newMsg.id
+        q = Query()
+        db.upsert({'messageId': newMsg.id, 'id': message.channel.id}, q.id == message.channel.id)
     except Exception as e:
       print (f'Permission error when sending update or fresh message: {e}')
 
@@ -44,8 +43,11 @@ async def on_message(message):
 
 async def getExistingMessage(message):
   channelId = str(message.channel.id)
-  if channelId in db:
-    existingMessageId = db[channelId]
+  q = Query()
+  # get first element off array or else None
+  prev = next(iter(db.search(q.id == message.channel.id)), None)
+  if prev and 'messageId' in prev:
+    existingMessageId = prev["messageId"]
     try:
       return await message.channel.fetch_message(existingMessageId)
     except discord.errors.NotFound:
@@ -55,6 +57,5 @@ async def getExistingMessage(message):
 def getLogChannel(message):
   return discord.utils.get(message.guild.channels, name="everybody-bot-log")
 
-keepalive.keep_alive()
-token = os.environ.get("DISCORD_TOKEN") 
+token = os.environ.get("DISCORD_TOKEN")
 client.run(token)
