@@ -15,6 +15,8 @@ spec:
       labels:
         app: everybody
     spec:
+      securityContext:
+        fsGroup: 1001
       terminationGracePeriodSeconds: 10
       containers:
       - name: everybody
@@ -25,6 +27,8 @@ spec:
           requests:
             memory: "96Mi"
             cpu: "5m"
+        securityContext:
+          fsGroup: 1001
         volumeMounts:
           - name: everybody-storage
             mountPath: /opt/storage
@@ -35,10 +39,6 @@ spec:
     - metadata:
         name: everybody-storage
       spec:
-        securitycontext:
-          fsGroup: 2000
-          runAsNonRoot: true
-          runAsUser: 1000
         accessModes: [ "ReadWriteOnce" ]
         resources:
           requests:
