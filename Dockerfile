@@ -7,7 +7,7 @@ RUN mkdir /opt/everybody/ && mkdir /opt/storage/
 
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 
-ENV PATH="/home/root/.poetry/bin:${PATH}"
+ENV PATH="/root/.poetry/bin:${PATH}"
 
 WORKDIR /opt/everybody/
 
