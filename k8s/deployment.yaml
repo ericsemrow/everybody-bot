@@ -23,8 +23,8 @@ spec:
         - containerPort: 80
         resources:
           requests:
-            memory: "96Mi"
-            cpu: "5m"
+            memory: "48Mi"
+            cpu: "2m"
         volumeMounts:
           - name: everybody-storage
             mountPath: /opt/storage

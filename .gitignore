@@ -1,2 +1,3 @@
 /docker-compose.yaml
 .idea
+k8s/secrets-everybody.yaml
